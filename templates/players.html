@@ -1,0 +1,71 @@
+<div ng-controller="playerCtrl">
+    <div ng-repeat="player in players | filter:{club:currentClub.name}">
+        <button type="button" ng-click="removePlayer(player)" class="close">&times;</button>
+        <button type="button" class="btn btn-link"><span class="glyphicon glyphicon-pencil" ng-click="setEditedPlayer(player);startEditingPlayer()"></span></button>
+        <a href="{{player.url}}" target="_blank">{{player.name}} - {{player.position}}</a>
+    </div>
+
+    <!-- CREATING PLAYER -->
+    <div ng-if="shouldShowCreatingPlayer()">
+        <button type="button" class="btn btn-link" ng-click="startCreatingPlayer()">
+            <span class="glyphicon glyphicon-plus"></span>
+            Dodaj grę
+        </button>
+        <form  class="create-form" ng-show="isCreatingPlayer" role="form" ng-submit="addPlayer(newPlayer)" novalidate>
+            <div class="form-group">
+                <label for="newPlayerName">Nazwa</label>
+                <input type="text" class="form-control" id="newPlayerName" ng-model="newPlayer.name" required placeholder="Nazwa ..." >
+            </div>
+            <div class="form-group">
+                <label for="newPlayerURL">Link </label>
+                <input type="text" class="form-control" id="newPlayerURL" ng-model="newPlayer.url" required placeholder="Link ...">
+            </div>
+            
+            <div class="form-group">
+                <label for="newPlayerPosition">Oceny</label>
+                <select class="form-control" id="newPlayerPosition" ng-model="newPlayer.position" ng-options="value.name as value.name for value in positions" placeholder="Skała ..." required>
+                    <option value="">Wybierz ocenę</option>
+                </select>
+            </div> 
+            <div class="form-group">
+                <label for="newPlayerClub">Kategoria gry</label>
+                <select class="form-control" ng-model="newPlayer.club"  id="newPlayerClub" ng-options="value.name as value.name for value in drills" ng-init="club='{{currentClub.name}}'" >
+                    <option value="">Wybierz kategorię</option>
+                </select>
+            </div>
+            
+            <button type="submit" class="btn btn-info btn-lg">Dodaj</button>
+            <button type="button" id="cancelPlayer" class="btn btn-default btn-lg pull-right" ng-click="cancelCreatingPlayer()">Anuluj</button>
+        </form>
+    </div>
+    <!-- EDITING PLAYER -->
+    <div ng-if="shouldShowEditingPlayer()">
+         <h4>Edycja {{editedPlayer.name}}</h4>
+        <form class="create-form" ng-show="isEditingPlayer" role="form" ng-submit="updatePlayer(editedPlayer)" novalidate>
+            <div class="form-group">
+                <label for="newPlayerName">Nazwa </label>
+                <input type="text" class="form-control" ng-model="editedPlayer.name" placeholder="Nazwa ...">
+            </div>
+            <div class="form-group">
+                <label for="newPlayerURL">Link do gry</label>
+                <input type="text" class="form-control" ng-model="editedPlayer.url" placeholder="Link ...">
+            </div>
+            
+            <div class="form-group">
+                <label for="newPlayerPosition">Wybierz ocenę</label>
+                <select class="form-control"ng-model="editedPlayer.position" ng-options="value.name as value.name for value in positions" placeholder="Ocena ...">
+                    <option value="">Wybierz ocenę</option>
+                </select>
+            </div> 
+            <div class="form-group">
+                <label for="newPlayerClub">Gra</label>
+                <select class="form-control" ng-model="editedPlayer.club"  ng-options="value.name as value.name for value in drills" ng-init="club='{{currentClub.name}}'" >
+                    <option value="">Wybierz kategorię gry</option>
+                </select>
+            </div>
+            
+            <button type="submit" class="btn btn-info btn-lg">Aktualizuj</button>
+            <button type="button" id="cancelPlayer" class="btn btn-default btn-lg pull-right" ng-click="cancelEditingPlayer()">Anuluj</button>
+        </form>
+    </div>
+</div>
